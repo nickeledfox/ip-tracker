@@ -1,6 +1,6 @@
-## [Frontend Mentor](https://www.frontendmentor.io/) - IP address tracker [challenge](https://www.frontendmentor.io/challenges/ip-address-tracker-I8-0yYAH0) :compass: :dart:
+## [Frontend Mentor](https://www.frontendmentor.io/) - IP address tracker [challenge](https://www.frontendmentor.io/challenges/ip-address-tracker-I8-0yYAH0) :compass:
 
-### The challenge
+### The challenge :dart:
 
 Users should be able to:
 
