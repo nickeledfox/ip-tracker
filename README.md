@@ -1,6 +1,6 @@
-## [Frontend Mentor](https://www.frontendmentor.io/) - IP address tracker [challenge](https://www.frontendmentor.io/challenges/ip-address-tracker-I8-0yYAH0) :compass:
+## [Frontend Mentor](https://www.frontendmentor.io/) - IP address tracker [challenge](https://www.frontendmentor.io/challenges/ip-address-tracker-I8-0yYAH0) :compass: :dart:
 
-### The challenge :dart:
+### The challenge
 
 Users should be able to:
 
@@ -25,12 +25,6 @@ npm run serve
 
 ```
 npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
 ```
 
 ### Customize configuration
