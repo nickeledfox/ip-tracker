@@ -6,7 +6,7 @@
 
   .ResultsForm__item
     h4.ResultsForm__item__title Location
-    p.ResultsForm__item__data {{IP.country + ','}} {{IP.state}}
+    p.ResultsForm__item__data {{IP.city + ','}} {{IP.state}} {{IP.zip}} 
 
   .ResultsForm__item
     h4.ResultsForm__item__title Timezone
@@ -30,21 +30,23 @@ export default {
   @include flex-vertical;
   padding: 1.5rem 0;
   background: #fff;
-  border-radius: 12px;
+  border-radius: $border-radius;
   display: flex;
   justify-content: space-around;
   margin: 0 1rem;
   max-width: 95vw;
+  width: 85vw;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
   z-index: 3;
-  width: 70vw;
 
   @media (min-width: 992px) {
     max-width: 80vw;
+    width: 70vw;
   }
 
   @media (min-width: 768px) {
     flex-direction: row;
+    padding: 0;
   }
 }
 .ResultsForm__item {
@@ -57,6 +59,10 @@ export default {
   @media (min-width: 768px) {
     padding: 1rem 5rem 1rem 3rem;
     text-align: left;
+
+    &:nth-child(2) {
+      padding-top: 3.5rem;
+    }
   }
 
   @media (min-width: 768px) {
@@ -84,6 +90,7 @@ export default {
   &__data {
     font-weight: 700;
     color: #000;
+    margin: 0.5rem 0 1rem 0;
 
     @media (max-width: 768px) {
       margin: 1rem;

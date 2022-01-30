@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Home from '../views/Home.vue';
-import '/node_modules/leaflet/dist/leaflet.css';
 
 const routes = [
   {

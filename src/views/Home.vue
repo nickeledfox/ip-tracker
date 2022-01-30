@@ -1,7 +1,7 @@
 <template lang="pug">
 header.header
   h1.header__title IP Address Tracker
-  form.SearchForm(action="#")
+  form.SearchForm(action="#" @submit.prevent)
     input.SearchForm__input(
       type="text",
       placeholder="Search for any IP address or domain",
@@ -12,15 +12,15 @@ header.header
     button.SearchForm__btn(type="submit", @click="getIpData")
       img(src="../assets/icons/icon-arrow.svg")
 
-  ResultsForm(:IP="IP")
+  ResultsForm(v-if="IP" :IP="IP")
 Map
 </template>
 
 <script>
 import ResultsForm from '@/components/ResultsForm.vue';
 import Map from '@/components/Map.vue';
-
-import { ref } from '@vue/runtime-core';
+import { LMap, LTileLayer, LMarker, LIcon } from 'leaflet';
+import { ref, onMounted } from '@vue/runtime-core';
 import axios from 'axios';
 import 'dotenv/config';
 
@@ -29,62 +29,105 @@ export default {
   components: {
     ResultsForm,
     Map,
+
+    // leaflet components:
+    LMap,
+    LTileLayer,
+    LMarker,
+    LIcon,
   },
-  props: ['IP', 'queryIP', 'getIpData'],
+
   setup() {
+    let map;
+    const locationIcon = L.icon({
+      iconUrl: require('/src/assets/icons/icon-location.svg'),
+      iconSize: [40, 50],
+      iconAnchor: [20, 30], // point of the icon which will correspond to marker's location
+    });
+
+    // Set attribution
+    const customAttribution =
+      'Coded by <a href="https://github.com/mia-7-7">mia-7-7</a>';
+
+    // Map setup
+    onMounted(() => {
+      const MAPBOX = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}';
+      const MAPBOX_TOKEN = process.env.VUE_APP_MAPBOX_TOKEN;
+      // Initialize LeafletJS map
+      map = L.map('map', { zoomControl: false }).setView(
+        [34.052235, -118.243683],
+        10
+      );
+      // Map customization
+      L.tileLayer(`${MAPBOX}?access_token={accessToken}`, {
+        attribution: customAttribution,
+        minZoom: 3,
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: MAPBOX_TOKEN,
+      }).addTo(map);
+    });
+
+    // Query setup
     const queryIP = ref('');
     let IP = ref('');
-    const KEY = process.env.VUE_APP_GEOLOCATION_API_KEY;
-    const GEOLOCATION = 'https://geo.ipify.org/api/v2/country';
+    const ArcGIS = process.env.VUE_APP_ARCGIS_API_KEY; // Address
+    const KEY = process.env.VUE_APP_GEOLOCATION_API_KEY; // IP location
+    const GEOLOCATION = 'https://geo.ipify.org/api/v2/country,city';
 
     const getIpData = async () => {
       try {
         const IPdata = await axios.get(
           `${GEOLOCATION}?apiKey=${KEY}&ipAddress=${queryIP.value}`
         );
-        const result = IPdata.data;
+        const searchResult = IPdata.data;
         IP.value = {
-          address: result.ip,
-          country: result.location.country,
-          state: result.location.region,
-          timezone: result.location.timezone,
-          isp: result.isp,
-          lat: result.location.lat,
-          lng: result.location.lng,
+          address: searchResult.ip,
+          city: searchResult.location.city,
+          state: searchResult.location.region,
+          zip: searchResult.location.postalCode,
+          timezone: searchResult.location.timezone,
+          isp: searchResult.isp,
+          lat: searchResult.location.lat,
+          lng: searchResult.location.lng,
         };
-        console.log(result);
+        // set marker to located IP
+        L.marker([IP.value.lat, IP.value.lng], {
+          icon: locationIcon,
+        })
+          .bindPopup('Popup') // add popup to the marker
+          .addTo(map, map.setView([IP.value.lat, IP.value.lng], 13))
+          .openPopup();
       } catch (err) {
         alert(err.message);
       }
     };
     return { queryIP, IP, getIpData };
-
-    if (IP.value == '' && IP.value != null) {
-      getIpData().load();
-    }
   },
+
+  // mounted() {
+  //   const valueIsDomain = (val) => {
+  //     const regex = /^[a-z0-9-]+\.[a-z0-9-]+(\.[a-z0-9-]+){0,2}$/i;
+  //     return val.match(regex) && val.match(regex).length;
+  //   };
+  //   if (this.queryIP == '') {
+  //     this.getIpData();
+  //   }
+  //   else if (this.queryIP == valueIsDomain) {
+  //     this.getIpData(valueIsDomain);
+  //   }
+  // },
 };
 </script>
+
+//*************************** Style ***********************************
 
 <style lang="scss">
 @use '../assets/styles/global' as *;
 
-.header {
-  @include flex-vertical;
-  position: relative;
-  background-image: url('../assets/images/pattern-bg.png');
-  background-position: center;
-  background-size: cover;
-  height: 30vh;
-  padding-top: 0.5rem;
-
-  &__title {
-    color: #fff;
-    padding-bottom: 1rem;
-    letter-spacing: 0.7px;
-  }
-}
-
+// search-form style
 .SearchForm {
   z-index: 5;
   display: flex;
@@ -96,7 +139,7 @@ export default {
   &__input {
     padding: 1rem 2rem;
     border: none;
-    border-radius: 12px 0 0 12px !important;
+    border-radius: $border-radius 0 0 $border-radius !important;
     font-size: 2rem;
     width: 70vw;
     max-width: 450px;
@@ -106,7 +149,7 @@ export default {
   &__btn {
     background: #000;
     padding: 1.5rem 2.5rem;
-    border-radius: 0 12px 12px 0;
+    border-radius: 0 $border-radius $border-radius 0;
     cursor: pointer;
 
     @media (any-hover: hover) {
