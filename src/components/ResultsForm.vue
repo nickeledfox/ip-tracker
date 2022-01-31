@@ -2,19 +2,19 @@
 .ResultsForm__container
   .ResultsForm__item
     h4.ResultsForm__item__title IP Address
-    p.ResultsForm__item__data {{IP.address}}
+    p.ResultsForm__item__data {{ IP.address }}
 
   .ResultsForm__item
     h4.ResultsForm__item__title Location
-    p.ResultsForm__item__data {{IP.city + ','}} {{IP.state}} {{IP.zip}} 
+    p.ResultsForm__item__data {{ IP.city }} {{ IP.state }} {{ IP.zip }} 
 
   .ResultsForm__item
     h4.ResultsForm__item__title Timezone
-    p.ResultsForm__item__data {{IP.timezone}} 
+    p.ResultsForm__item__data {{ IP.timezone }} 
 
   .ResultsForm__item
     h4.ResultsForm__item__title Isp
-    p.ResultsForm__item__data {{IP.isp}}
+    p.ResultsForm__item__data {{ IP.isp }}
 </template>
 
 <script>

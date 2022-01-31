@@ -1,7 +1,7 @@
 <template lang="pug">
 header.header
   h1.header__title IP Address Tracker
-  form.SearchForm(action="#" @submit.prevent)
+  form.SearchForm(action="#")
     input.SearchForm__input(
       type="text",
       placeholder="Search for any IP address or domain",
@@ -9,7 +9,7 @@ header.header
       tabindex="0",
       v-model="queryIP"
     )
-    button.SearchForm__btn(type="submit", @click="getIpData")
+    button.SearchForm__btn(type="submit", @click.prevent="getIpData")
       img(src="./assets/icons/icon-arrow.svg")
 
   ResultsForm(v-if="IP" :IP="IP")
@@ -74,7 +74,7 @@ export default {
     const queryIP = ref('');
     let IP = ref('');
     const ArcGIS = process.env.VUE_APP_ARCGIS_API_KEY; // Address
-    const KEY = process.env.VUE_APP_GEOLOCATION_API_KEY; // IP location
+    const KEY = 'at_8fc4RU4wQAlLBY6mAHc0aMY1bQb7z&ipAddress'; // IP location
     const GEOLOCATION = 'https://geo.ipify.org/api/v2/country,city';
 
     const getIpData = async () => {
@@ -85,7 +85,7 @@ export default {
         const searchResult = IPdata.data;
         IP.value = {
           address: searchResult.ip,
-          city: searchResult.location.city,
+          city: searchResult.location.city + ',',
           state: searchResult.location.region,
           zip: searchResult.location.postalCode,
           timezone: searchResult.location.timezone,
@@ -97,7 +97,7 @@ export default {
         L.marker([IP.value.lat, IP.value.lng], {
           icon: locationIcon,
         })
-          .bindPopup('Popup') // add popup to the marker
+          .bindPopup([IP.value.lat, IP.value.lng].toString()) // add popup to the marker
           .addTo(map, map.setView([IP.value.lat, IP.value.lng], 13))
           .openPopup();
       } catch (err) {
@@ -106,19 +106,6 @@ export default {
     };
     return { queryIP, IP, getIpData };
   },
-
-  // mounted() {
-  //   const valueIsDomain = (val) => {
-  //     const regex = /^[a-z0-9-]+\.[a-z0-9-]+(\.[a-z0-9-]+){0,2}$/i;
-  //     return val.match(regex) && val.match(regex).length;
-  //   };
-  //   if (this.queryIP == '') {
-  //     this.getIpData();
-  //   }
-  //   else if (this.queryIP == valueIsDomain) {
-  //     this.getIpData(valueIsDomain);
-  //   }
-  // },
 };
 </script>
 //*************************** Style ***********************************
