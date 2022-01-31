@@ -6,51 +6,42 @@
 // import { LMap, LTileLayer, LMarker, LIcon } from 'leaflet';
 import '/node_modules/leaflet/dist/leaflet.css';
 
-// import { onMounted, ref } from '@vue/runtime-core';
-// import 'dotenv/config';
+import { onMounted } from '@vue/runtime-core';
+import 'dotenv/config';
 
 export default {
   name: 'Map',
   // setup() {
+  //   let map;
+  //   const locationIcon = L.icon({
+  //     iconUrl: require('/src/assets/icons/icon-location.svg'),
+  //     iconSize: [40, 50],
+  //     iconAnchor: [20, 30], // point of the icon which will correspond to marker's location
+  //   });
+  //   // Set attribution
+  //   const customAttribution =
+  //     'Coded by <a href="https://github.com/mia-7-7">mia-7-7</a>';
+
+  //   // Map setup
   //   onMounted(() => {
-  //     const MAPBOX = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}';
-  //     const MAPBOX_TOKEN = process.env.VUE_APP_MAPBOX_TOKEN;
-  //     const ArcGIS = process.env.VUE_APP_ARCGIS_API_KEY;
-
-  //     const customAttribution =
-  //       'Coded by <a href="https://github.com/mia-7-7">mia-7-7</a>';
-
+  //     const URL = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}';
+  //     const TOKEN = process.env.VUE_APP_MAPBOX_TOKEN;
   //     // Initialize LeafletJS map
-  //     const map = L.map('map', { zoomControl: false }).setView(
-  //       [51.505, -0.09],
+  //     map = L.map('map', { zoomControl: false }).setView(
+  //       [34.052235, -118.243683],
   //       10
   //     );
-
-  //     let locationIcon = L.icon({
-  //       iconUrl: require('/src/assets/icons/icon-location.svg'),
-  //       iconSize: [50, 60],
-  //       iconAnchor: [25, 35], // point of the icon which will correspond to marker's location
-  //     });
-
-  //     const marker = L.marker([51.5, -0.09], { icon: locationIcon });
-  //     marker.bindPopup('I am a green leaf test popup.').addTo(map).openPopup();
-
-  //     L.tileLayer(`${MAPBOX}?access_token={accessToken}`, {
+  //     // Map customization
+  //     L.tileLayer(`${URL}?access_token={accessToken}`, {
   //       attribution: customAttribution,
   //       minZoom: 3,
   //       maxZoom: 18,
   //       id: 'mapbox/streets-v11',
   //       tileSize: 512,
   //       zoomOffset: -1,
-  //       accessToken: MAPBOX_TOKEN,
+  //       accessToken: TOKEN,
   //     }).addTo(map);
   //   });
-  // },
-  // components: {
-  //   LMap,
-  //   LTileLayer,
-  //   LMarker,
-  //   LIcon,
   // },
 };
 </script>
