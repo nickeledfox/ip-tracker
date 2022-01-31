@@ -49,6 +49,19 @@ export default {
     const customAttribution =
       'Coded by <a href="https://github.com/mia-7-7">mia-7-7</a>';
 
+    // Popup on the map on click
+    // TODO: display addrrss.
+    const showOnClick = () => {
+      var popup = L.popup();
+      function onMapClick(e) {
+        popup
+          .setLatLng(e.latlng)
+          .setContent('You clicked the map at ' + e.latlng.toString())
+          .openOn(map);
+      }
+      map.on('click', onMapClick);
+    };
+
     // Map setup
     onMounted(() => {
       const URL = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}';
@@ -68,13 +81,16 @@ export default {
         zoomOffset: -1,
         accessToken: TOKEN,
       }).addTo(map);
+      showOnClick();
     });
 
     // Query setup
     const queryIP = ref('');
     let IP = ref('');
+    // TODO: Implement address. Current: import ersi Geocode problem
     const ArcGIS = process.env.VUE_APP_ARCGIS_API_KEY; // Address
-    const KEY = 'at_8fc4RU4wQAlLBY6mAHc0aMY1bQb7z&ipAddress'; // IP location
+    const KEY = process.env.VUE_APP_GEOLOCATION_API_KEY; // IP location
+
     const GEOLOCATION = 'https://geo.ipify.org/api/v2/country,city';
 
     const getIpData = async () => {
@@ -96,14 +112,15 @@ export default {
         // set marker to located IP
         L.marker([IP.value.lat, IP.value.lng], {
           icon: locationIcon,
-        })
-          .bindPopup([IP.value.lat, IP.value.lng].toString()) // add popup to the marker
+        }) // TODO: display addrrss.
+          .bindPopup([IP.value.lat, IP.value.lng].toString() + ' This place') // add popup to the marker
           .addTo(map, map.setView([IP.value.lat, IP.value.lng], 13))
           .openPopup();
       } catch (err) {
         alert(err.message);
       }
     };
+
     return { queryIP, IP, getIpData };
   },
 };
