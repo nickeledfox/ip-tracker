@@ -3,56 +3,42 @@
 </template>
 
 <script>
-// import { LMap, LTileLayer, LMarker, LIcon } from 'leaflet';
 import '/node_modules/leaflet/dist/leaflet.css';
-
-// import { onMounted, ref } from '@vue/runtime-core';
-// import 'dotenv/config';
 
 export default {
   name: 'Map',
-  // setup() {
-  //   onMounted(() => {
-  //     const MAPBOX = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}';
-  //     const MAPBOX_TOKEN = process.env.VUE_APP_MAPBOX_TOKEN;
-  //     const ArcGIS = process.env.VUE_APP_ARCGIS_API_KEY;
-
-  //     const customAttribution =
-  //       'Coded by <a href="https://github.com/mia-7-7">mia-7-7</a>';
-
-  //     // Initialize LeafletJS map
-  //     const map = L.map('map', { zoomControl: false }).setView(
-  //       [51.505, -0.09],
-  //       10
-  //     );
-
-  //     let locationIcon = L.icon({
-  //       iconUrl: require('/src/assets/icons/icon-location.svg'),
-  //       iconSize: [50, 60],
-  //       iconAnchor: [25, 35], // point of the icon which will correspond to marker's location
-  //     });
-
-  //     const marker = L.marker([51.5, -0.09], { icon: locationIcon });
-  //     marker.bindPopup('I am a green leaf test popup.').addTo(map).openPopup();
-
-  //     L.tileLayer(`${MAPBOX}?access_token={accessToken}`, {
-  //       attribution: customAttribution,
-  //       minZoom: 3,
-  //       maxZoom: 18,
-  //       id: 'mapbox/streets-v11',
-  //       tileSize: 512,
-  //       zoomOffset: -1,
-  //       accessToken: MAPBOX_TOKEN,
-  //     }).addTo(map);
-  //   });
-  // },
-  // components: {
-  //   LMap,
-  //   LTileLayer,
-  //   LMarker,
-  //   LIcon,
-  // },
 };
+
+// const getAddress = () => {
+//   var map = L.map('map').setView([40.725, -73.985], 13);
+//   var apiKey =
+//     'AAPK82950f376e9a493fbf7deb98e5a2b4cdCEPdNyXi8cHifp_-itIYexQWWIFIqmrkCOdJHFNbyXDZDywOvRo63774YqJarogb';
+//   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//     attribution:
+//       '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+//   }).addTo(map);
+
+//   var geocodeService = L.esri.Geocoding.geocodeService({
+//     apikey: apiKey, // replace with your api key - https://developers.arcgis.com
+//   });
+
+//   map.on('click', function (e) {
+//     geocodeService
+//       .reverse()
+//       .latlng(e.latlng)
+//       .run(function (error, result) {
+//         if (error) {
+//           return;
+//         }
+
+//         L.marker(result.latlng)
+//           .addTo(map)
+//           .bindPopup(result.address.Match_addr)
+//           .openPopup();
+//       });
+//   });
+// };
+// getAddress();
 </script>
 
 <style lang="scss">
