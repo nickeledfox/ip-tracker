@@ -9,7 +9,7 @@ header.header
       tabindex="0",
       v-model="queryIP"
     )
-    button.SearchForm__btn(type="submit", @click.prevent="getIpData")
+    button.SearchForm__btn(type="submit", @click.prevent="ValidateInput")
       img(src="./assets/icons/icon-arrow.svg")
 
   ResultsForm(v-if="IP" :IP="IP")
@@ -68,7 +68,7 @@ export default {
       const TOKEN = process.env.VUE_APP_MAPBOX_TOKEN;
       // Initialize LeafletJS map
       map = L.map('map', { zoomControl: false }).setView(
-        [34.052235, -118.243683],
+        [37.773972, -122.431297],
         10
       );
       // Map customization
@@ -84,16 +84,31 @@ export default {
       showOnClick();
     });
 
+    const ValidateInput = () => {
+      const ipAddressRegex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+      const domainRegex =
+        /^(?!:\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\.[a-zA-Z]{2,11}?$/;
+      if (domainRegex.test(queryIP.value)) {
+        getIpData();
+        return true;
+      } else if (ipAddressRegex.test(queryIP.value)) {
+        getIpData();
+        return true;
+      }
+      alert('You have entered an invalid IP address!');
+      queryIP.value = '';
+      return false;
+    };
+
     // Query setup
     const queryIP = ref('');
     let IP = ref('');
-    // TODO: Implement address. Current: import ersi Geocode problem
-    const ArcGIS = process.env.VUE_APP_ARCGIS_API_KEY; // Address
-    const KEY = process.env.VUE_APP_GEOLOCATION_API_KEY; // IP location
-
-    const GEOLOCATION = 'https://geo.ipify.org/api/v2/country,city';
 
     const getIpData = async () => {
+      // TODO: Implement address. Current: import ersi Geocode problem
+      const ArcGIS = process.env.VUE_APP_ARCGIS_API_KEY; // Address
+      const KEY = process.env.VUE_APP_GEOLOCATION_API_KEY; // IP location
+      const GEOLOCATION = 'https://geo.ipify.org/api/v2/country,city';
       try {
         const IPdata = await axios.get(
           `${GEOLOCATION}?apiKey=${KEY}&ipAddress=${queryIP.value}`
@@ -112,16 +127,16 @@ export default {
         // set marker to located IP
         L.marker([IP.value.lat, IP.value.lng], {
           icon: locationIcon,
-        }) // TODO: display addrrss.
-          .bindPopup([IP.value.lat, IP.value.lng].toString() + ' This place') // add popup to the marker
-          .addTo(map, map.setView([IP.value.lat, IP.value.lng], 13))
+        })
+          .addTo(map, map.flyTo([IP.value.lat, IP.value.lng], 14))
+          .bindPopup('This place') // TODO: display addrrss
           .openPopup();
       } catch (err) {
         alert(err.message);
       }
     };
 
-    return { queryIP, IP, getIpData };
+    return { queryIP, IP, getIpData, ValidateInput };
   },
 };
 </script>
