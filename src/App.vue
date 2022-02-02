@@ -19,7 +19,8 @@ Map
 <script>
 import ResultsForm from '@/components/ResultsForm.vue';
 import Map from '@/components/Map.vue';
-import { LMap, LTileLayer, LMarker, LIcon } from 'leaflet';
+import MapInit from './modules/map';
+
 import { ref, onMounted } from '@vue/runtime-core';
 import axios from 'axios';
 import 'dotenv/config';
@@ -29,59 +30,13 @@ export default {
   components: {
     ResultsForm,
     Map,
-
-    // leaflet components:
-    LMap,
-    LTileLayer,
-    LMarker,
-    LIcon,
   },
 
   setup() {
-    let map;
-    const locationIcon = L.icon({
-      iconUrl: require('/src/assets/icons/icon-location.svg'),
-      iconSize: [40, 50],
-      iconAnchor: [20, 30], // point of the icon which will correspond to marker's location
-    });
+    const map = new MapInit();
 
-    // Set attribution
-    const customAttribution =
-      'Coded by <a href="https://github.com/mia-7-7">mia-7-7</a>';
-
-    // Popup on the map on click
-    // TODO: display addrrss.
-    const showOnClick = () => {
-      var popup = L.popup();
-      function onMapClick(e) {
-        popup
-          .setLatLng(e.latlng)
-          .setContent('You clicked the map at ' + e.latlng.toString())
-          .openOn(map);
-      }
-      map.on('click', onMapClick);
-    };
-
-    // Map setup
     onMounted(() => {
-      const URL = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}';
-      const TOKEN = process.env.VUE_APP_MAPBOX_TOKEN;
-      // Initialize LeafletJS map
-      map = L.map('map', { zoomControl: false }).setView(
-        [37.773972, -122.431297],
-        10
-      );
-      // Map customization
-      L.tileLayer(`${URL}?access_token={accessToken}`, {
-        attribution: customAttribution,
-        minZoom: 3,
-        maxZoom: 18,
-        id: 'mapbox/streets-v11',
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: TOKEN,
-      }).addTo(map);
-      showOnClick();
+      map.displayMap();
     });
 
     const ValidateInput = () => {
@@ -113,33 +68,30 @@ export default {
         const IPdata = await axios.get(
           `${GEOLOCATION}?apiKey=${KEY}&ipAddress=${queryIP.value}`
         );
-        const searchResult = IPdata.data;
+        const result = IPdata.data;
         IP.value = {
-          address: searchResult.ip,
-          city: searchResult.location.city + ',',
-          state: searchResult.location.region,
-          zip: searchResult.location.postalCode,
-          timezone: searchResult.location.timezone,
-          isp: searchResult.isp,
-          lat: searchResult.location.lat,
-          lng: searchResult.location.lng,
+          address: result.ip,
+          city: result.location.city + ',',
+          state: result.location.region,
+          zip: result.location.postalCode,
+          timezone: result.location.timezone,
+          isp: result.isp,
+
+          lat: result.location.lat,
+          lng: result.location.lng,
         };
         // set marker to located IP
-        L.marker([IP.value.lat, IP.value.lng], {
-          icon: locationIcon,
-        })
-          .addTo(map, map.flyTo([IP.value.lat, IP.value.lng], 14))
-          .bindPopup('This place') // TODO: display addrrss
-          .openPopup();
+
+        map.flyTo(IP.value.lat, IP.value.lng);
       } catch (err) {
-        alert(err.message);
+        console.log(err.message);
       }
     };
-
     return { queryIP, IP, getIpData, ValidateInput };
   },
 };
 </script>
+
 //*************************** Style ***********************************
 
 <style lang="scss">
