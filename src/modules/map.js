@@ -44,10 +44,11 @@ export default class MapInit {
   }
 
   createMarker() {
+    this.msg = 'We are here!';
     this.newMarker = leaflet
       .marker(this.coords, { icon: this.icon })
       .addTo(this.map)
-      .bindPopup('We are here!');
+      .bindPopup(this.msg);
   }
 
   displayMap() {
@@ -57,6 +58,15 @@ export default class MapInit {
     this.createMarker();
   }
 
+  setView(lat, lng) {
+    this.map.setView([lat, lng], 14);
+
+    this.newMarker = leaflet
+      .marker([lat, lng], { icon: this.icon })
+      .addTo(this.map)
+      .bindPopup(this.msg);
+  }
+
   flyTo(lat, lng) {
     this.map.flyTo([lat, lng], 14);
     this.map.removeLayer(this.newMarker);
@@ -64,6 +74,6 @@ export default class MapInit {
     this.newMarker = leaflet
       .marker([lat, lng], { icon: this.icon })
       .addTo(this.map)
-      .bindPopup('We are here!');
+      .bindPopup(this.msg);
   }
 }

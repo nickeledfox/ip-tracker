@@ -37,6 +37,7 @@ export default {
 
     onMounted(() => {
       map.displayMap();
+      getIpData();
     });
 
     const ValidateInput = () => {
@@ -76,13 +77,15 @@ export default {
           zip: result.location.postalCode,
           timezone: result.location.timezone,
           isp: result.isp,
-
-          lat: result.location.lat,
-          lng: result.location.lng,
         };
-        // set marker to located IP
 
-        map.flyTo(IP.value.lat, IP.value.lng);
+        // set marker to located IP
+        if (queryIP.value == '') {
+          map.setView(result.location.lat, result.location.lng);
+        }
+        if (queryIP.value) {
+          map.flyTo(result.location.lat, result.location.lng);
+        }
       } catch (err) {
         console.log(err.message);
       }
