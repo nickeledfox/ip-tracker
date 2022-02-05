@@ -1,7 +1,6 @@
 ## [Frontend Mentor](https://www.frontendmentor.io/) - IP address tracker [challenge](https://www.frontendmentor.io/challenges/ip-address-tracker-I8-0yYAH0) :dart:
 
-
-<img src="https://user-images.githubusercontent.com/81501711/151889600-dfc8879d-cca6-4170-af90-696d30d7d935.jpg" width="100%">
+<img src="https://user-images.githubusercontent.com/81501711/152622957-b15f1eb0-894e-455f-96ad-ac8ad2672999.png" width="100%">
 
 ### The challenge
 
